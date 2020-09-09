@@ -81,10 +81,11 @@ def changestatus(cardid, spaceid):
         print e
 
 if __name__ == '__main__':
+    #  1.1获取不同版本中，新提交的信息
     ret, cardcodes = findnewcommit() 
     ccs = cardcodes.split("\n")
     cardcodeslist = []
-    # 处理返回数据格式，获得C开头的cardcode
+    # 2 处理返回数据格式，获得C开头的cardcode
     for ca in ccs:
         if "#" in ca:
             tmp = ca.split("#")
@@ -93,17 +94,21 @@ if __name__ == '__main__':
     cou = 0
     for cc in cardcodeslist:
         print "cc every cardcode: ", cc
+        # 3 根据cardcode 获得card id
         card_info = get_card_id(cc)
         print "card_info:", card_info
         #card_dic = eval(card_info)
+        # 3.1 字符串解析为字典格式
         card_dic = json.loads(card_info)
         if card_dic["message"] != "SUCCESS":
             continue
         print "card_dic:", card_dic
         data_dic = card_dic["data"]
-        print data_dic["id"], data_dic["spaceId"]
+        #print data_dic["id"], data_dic["spaceId"]
+        # 3.2 字典格式获取cardid和spaceid
         cardid = data_dic["id"]
         spaceid = data_dic["spaceId"]
+        # 4 更改状态
         changestatus(cardid, spaceid)
         cou += 1
         #changestatus(569497, 3574)
