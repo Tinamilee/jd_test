@@ -25,9 +25,17 @@ if eof then
       package.cpath = package.cpath.."/usr/local/lib/?.so;"
       package.cpath = package.cpath.."/export/serveres/nginx/lualib/?.so;"
       package.cpath = package.cpath.."/export/serveres/nginx/luajit/lib/?.so;"
-      local json = require("cjson")
-      local tb = json.decode(whole)
-      tb["data"][1]["t"] = "something apple 11"
-      ngx.arg[1] = json.encode(tb)
+      
+      local ok,errors = pcall(
+         function ()
+            local json = require("cjson")
+            local tb = json.decode(whole)
+            tb["data"][1]["t"] = "something apple 11"
+            ngx.arg[1] = json.encode(tb)
+         end
+      )
+      if not ok then
+          ngx.arg[1] = errors
+      end
    end
 end
