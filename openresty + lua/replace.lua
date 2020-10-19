@@ -1,3 +1,5 @@
+-- 获取单次返回体的数据ngx.arg[1]，ngx.arg[2]标志位，为true时，返回结束。
+-- 当返回体数据偏大时，单个请求会有多次返回。
 local chunk, eof = ngx.arg[1], ngx.arg[2]
 local buffered = ngx.ctx.buffered
 if not buffered then
@@ -5,6 +7,8 @@ if not buffered then
    ngx.ctx.buffered = buffered
 end
 if chunk ~= "" then
+   -- 存储每次返回的数据，加入到buffered，
+   -- #buffered是获取buffered的长度。数据类型是table：数组/字典组合。
    buffered[#buffered+1] = chunk
    ngx.arg[1] = nil
 end
@@ -15,6 +19,7 @@ function stringToTable(str)
 end
 
 if eof then
+   -- 连接每次返回的数据
    local whole = table.concat(buffered)
    ngx.ctx.buffered = nil
    local tab = nil
