@@ -1,0 +1,6 @@
+# 当python执行sql时，如果字符串带有“”，会报错1064.需要反义 ' \'+ something string with \" \ " + \' ', 就是在单引号里再加一层 反义单引号。' \' \''
+cluelist = '\'[{\"seed\": \"\", \"tag\": ' + str(tag) + '}]\''
+cmd = "select count(*)/%s from %s where clueList=%s" % (all_count, data_sheet, cluelist)
+db_engine.qurey(cmd)
+
+eval(string),可以将字符串直接转换为列表字典等类型。例如a = '[1,2,3]', type(eval(a))--> list.
